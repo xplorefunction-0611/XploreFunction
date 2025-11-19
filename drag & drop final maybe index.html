@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assessment: Function or Not a Function</title>
+<style>
+  body {
+    font-family: "Poppins", sans-serif;
+    background: #f8f9fb;
+    text-align: center;
+    padding: 20px;
+  }
+  h1 { color: #3a3a9f; }
+  .container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+  }
+  .dropzone {
+    width: 45%;
+    min-height: 200px;
+    border: 3px dashed #bbb;
+    border-radius: 20px;
+    padding: 15px;
+    background: #fff;
+  }
+  .dropzone h3 {
+    color: #555;
+  }
+  .card {
+    background: #f0f4ff;
+    color: #222;
+    margin: 8px;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: grab;
+  }
+  .correct {
+    border: 2px solid green;
+  }
+  .incorrect {
+    border: 2px solid red;
+  }
+</style>
+</head>
+<body>
+
+<h1>🔹 Assessment: Function or Not a Function?</h1>
+<p>Drag each example into the correct box below.</p>
+
+<div id="cards">
+  <div class="card" draggable="true" data-answer="function">f(x) = 2x + 3</div>
+  <div class="card" draggable="true" data-answer="not">x² + y² = 9</div>
+  <div class="card" draggable="true" data-answer="function">Each person → their phone number</div>
+  <div class="card" draggable="true" data-answer="not">Each person → their favorite color(s)</div>
+</div>
+
+<div class="container">
+  <div class="dropzone" data-zone="function">
+    <h3>Function ✅</h3>
+  </div>
+  <div class="dropzone" data-zone="not">
+    <h3>Not a Function ❌</h3>
+  </div>
+</div>
+
+<script>
+  const cards = document.querySelectorAll('.card');
+  const dropzones = document.querySelectorAll('.dropzone');
+
+  cards.forEach(card => {
+    card.addEventListener('dragstart', e => {
+      e.dataTransfer.setData('text/plain', card.dataset.answer);
+      e.dataTransfer.setData('id', card.innerText);
+      card.style.opacity = 0.5;
+    });
+    card.addEventListener('dragend', () => card.style.opacity = 1);
+  });
+
+  dropzones.forEach(zone => {
+    zone.addEventListener('dragover', e => e.preventDefault());
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      const answer = e.dataTransfer.getData('text/plain');
+      const text = e.dataTransfer.getData('id');
+      const droppedCard = [...cards].find(c => c.innerText === text);
+      zone.appendChild(droppedCard);
+
+      if (answer === zone.dataset.zone) {
+        droppedCard.classList.add('correct');
+        droppedCard.classList.remove('incorrect');
+      } else {
+        droppedCard.classList.add('incorrect');
+        droppedCard.classList.remove('correct');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
+
